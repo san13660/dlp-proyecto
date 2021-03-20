@@ -37,6 +37,8 @@ def find_node_stuff(node, symbol_ids):
             node.first_pos.update(node.left.first_pos)
             node.last_pos.update(node.left.last_pos)
         elif(node.data == '+'):
+            if(node.left.nullable):
+                node.nullable = True
             node.first_pos.update(node.left.first_pos)
             node.last_pos.update(node.left.last_pos)
         elif(node.data == '|'):
@@ -56,7 +58,7 @@ def recursive(afd_direct, current_state, alphabet, symbol_ids, follow_pos_table,
         for symbol_id in symbol_ids:
             if(symbol_id['symbol'] == letter and symbol_id['id'] in current_state.id):
                 new_state_id.update(follow_pos_table[symbol_id['id']])
-                print('S:{}   I:{}   IDS:{}'.format(current_state.id, symbol_id['symbol'], new_state_id))
+                #print('S:{}   I:{}   IDS:{}'.format(current_state.id, symbol_id['symbol'], new_state_id))
 
         if(len(new_state_id)==0):
             continue
@@ -88,6 +90,20 @@ def find_tree_values(tree):
 
     return new_tree, symbol_ids
 
+def recursive_follow_pos(current_node, symbol_ids, follow_pos_table):
+    for symbol_id in symbol_ids:
+        if(current_node.data == concat_symbol and symbol_id['id'] in current_node.left.last_pos):
+            follow_pos_table[symbol_id['id']].update(current_node.right.first_pos)
+
+        if(current_node.data in '*?+' and symbol_id['id'] in current_node.last_pos):
+            follow_pos_table[symbol_id['id']].update(current_node.first_pos)
+    
+    if(current_node.left):
+        recursive_follow_pos(current_node.left, symbol_ids, follow_pos_table)
+
+    if(current_node.right):
+        recursive_follow_pos(current_node.right, symbol_ids, follow_pos_table)
+
 def create_direct_afd(tree, symbol_ids, alphabet):
     follow_pos_table = {}
 
@@ -98,16 +114,7 @@ def create_direct_afd(tree, symbol_ids, alphabet):
         if(symbol_id['symbol'] == '#'):
             final_state_symbol_id = symbol_id['id']
 
-    current_node = tree
-    while(current_node):
-        for symbol_id in symbol_ids:
-            if(current_node.data == concat_symbol and symbol_id['id'] in current_node.left.last_pos):
-                follow_pos_table[symbol_id['id']].update(current_node.right.first_pos)
-
-            if(current_node.data == '*' and symbol_id['id'] in current_node.last_pos):
-                follow_pos_table[symbol_id['id']].update(current_node.first_pos)
-            
-        current_node = current_node.left
+    recursive_follow_pos(tree, symbol_ids, follow_pos_table)
 
     print('\n---------------------------')
     print(follow_pos_table)

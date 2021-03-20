@@ -141,9 +141,10 @@ def find_subnodes(node):
 
     if(len(node.data) == 1):
         if(node.data not in symbols):
-            return node.data
-        elif(node.data == epsilon_symbol):
-            return None
+            if(node.data != epsilon_symbol):
+                return node.data
+            else:
+                return None
         else:
             raise Exception("Syntax Error")
 

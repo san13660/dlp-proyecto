@@ -52,8 +52,6 @@ def find_stuff(afn, afd, state, letters):
 
 def create_afd(afn, letters):
     afd = AF()
-    print('\n---Creando AFD por subconjuntos---\n')
-
     
     initial_state = e_closure(afn, afn.initial_state)
     print('e-closure({}) = {}'.format(set([afn.initial_state.id]),set(initial_state.id)))
