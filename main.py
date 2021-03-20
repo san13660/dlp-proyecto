@@ -8,12 +8,54 @@ from simulation import simulate_afd, simulate_afn
 
 import time
 
-rules = input('Ingrese la expresion regular: ')
+def check_for_errors(rules):
+    open_p = rules.count('(')
+    close_p = rules.count(')')
 
-print('\n---Creando arbol---\n')
+    if(open_p > close_p):
+        raise Exception("Parentesis invalidos, falta -> )")
+    
+    if(close_p > open_p):
+        raise Exception("Parentesis invalidos, falta -> (")
 
-tree = Node.initialize_tree(rules)
-alphabet = separate_children(tree)
+    if('|*' in rules):
+        raise Exception("Operadores invalidos -> |*")
+    
+    if('|?' in rules):
+        raise Exception("Operadores invalidos -> |?")
+
+    if('|+' in rules):
+        raise Exception("Operadores invalidos -> |+")
+
+    if('|)' in rules):
+        raise Exception("Operador invalido -> |)")
+
+    if('(|' in rules):
+        raise Exception("Operador invalido -> (|")
+
+def fix_errors(rules):
+    rules_fixed = rules
+    if('()' in rules):
+        rules_fixed = rules_fixed.replace('()','')
+
+    return rules_fixed
+
+flag = True
+while(flag):
+    rules = input('\nIngrese la expresion regular: ')
+
+    try:
+        check_for_errors(rules)
+        rules = fix_errors(rules)
+
+        print('\n---Creando arbol---\n')
+
+        tree = Node.initialize_tree(rules)
+        alphabet = separate_children(tree)
+        flag=False
+    except Exception as e:
+        print('\n** ERROR: {} **'.format(e))
+
 
 tree.graph_tree('Arbol_AFN_Thompson', 'Arbol (AFN Thompson) - {}'.format(rules))
 
@@ -31,7 +73,7 @@ afn.graph_fsm('AFN_Thompson', 'AFN (Thompson) - {}'.format(rules))
 print('\n---Creando AFD por subconjuntos---\n')
 
 afd = create_afd(afn, alphabet)
-afd.assign_state_numbers()
+#afd.assign_state_numbers()
 afd.graph_fsm('AFD_Subconjuntos', 'AFD (Subconjuntos) - {}'.format(rules))
 
 #--------------------------------------------------------------
@@ -42,7 +84,7 @@ new_tree, symbol_ids = find_tree_values(tree)
 new_tree.graph_tree('Arbol_Directo', 'Arbol (AFD Directo) - {}'.format(rules),show_pos=True)
 
 afd_direct = create_direct_afd(new_tree,symbol_ids,alphabet)
-afd_direct.assign_state_numbers()
+#afd_direct.assign_state_numbers()
 afd_direct.graph_fsm('AFD_Directo', 'AFD (Directo) - {}'.format(rules))
 
 #-----------------------------------------------------------

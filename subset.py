@@ -2,20 +2,23 @@ from graphviz import Digraph
 from automaton import State, Transition, AF
 from statics import epsilon_symbol, extended_symbols, concat_symbol
 
-def e_closure(afn, state, past_states_ids={}):
+def e_closure(afn, state, past_states_ids=set()):
     if(type(state.id) is set):
         state_id_set = state.id.copy()
     else:
         state_id_set = {state.id}
 
-    state_transitions = [transition for transition in afn.transitions if(transition.current_state.id in state_id_set and transition.symbol == epsilon_symbol)]
-
-    for transition in state_transitions:
-        if(transition.next_state.id not in state_id_set and transition.next_state.id not in past_states_ids):
-            new_new_subset = e_closure(afn, transition.next_state, state_id_set)
-            state_id_set.update(new_new_subset.id)
+    for transition in afn.transitions:
+        if(transition.symbol == epsilon_symbol 
+        and transition.current_state.id in state_id_set
+        and transition.next_state.id not in state_id_set 
+        and transition.next_state.id not in past_states_ids):
+            new_past_states_ids = past_states_ids.copy()
+            new_past_states_ids.add(transition.next_state.id)
+            new_state, _ = e_closure(afn, transition.next_state, new_past_states_ids)
+            state_id_set.update(new_state.id)
             
-    return State(state_id_set)
+    return State(state_id_set), past_states_ids
 
 def mov(afn, state, letter):
     if(type(state.id) is set):
@@ -39,7 +42,7 @@ def recursive_mov(afn, afd, state, letters):
         new_state = mov(afn, state, letter)
         print('mov({}, {}) = {}'.format(set(state.id),letter,set(new_state.id) if new_state else {}))
         if(new_state):
-            new_state_2 = e_closure(afn, new_state)
+            new_state_2, _ = e_closure(afn, new_state)
             print('e-closure({}) = {}'.format(set(new_state.id),set(new_state_2.id)))
             new_transitions = Transition(state, new_state_2, letter)
 
@@ -53,7 +56,7 @@ def recursive_mov(afn, afd, state, letters):
 def create_afd(afn, letters):
     afd = AF()
     
-    initial_state = e_closure(afn, afn.initial_state)
+    initial_state, _ = e_closure(afn, afn.initial_state)
     print('e-closure({}) = {}'.format(set([afn.initial_state.id]),set(initial_state.id)))
 
     afd.states.append(initial_state)

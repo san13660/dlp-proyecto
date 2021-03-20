@@ -112,6 +112,7 @@ def create_direct_afd(tree, symbol_ids, alphabet):
         follow_pos_table[symbol_id['id']] = set()
         if(symbol_id['symbol'] == '#'):
             final_state_symbol_id = symbol_id['id']
+            break
 
     recursive_follow_pos(tree, symbol_ids, follow_pos_table)
 
@@ -123,6 +124,9 @@ def create_direct_afd(tree, symbol_ids, alphabet):
     initial_state = State(tree.first_pos)
     afd_direct.states.append(initial_state)
     afd_direct.initial_state = initial_state
+
+    if(final_state_symbol_id in initial_state.id):
+        afd_direct.final_states.append(initial_state)
 
     current_state = initial_state
 
