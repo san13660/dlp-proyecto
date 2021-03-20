@@ -94,8 +94,7 @@ def recursive_follow_pos(current_node, symbol_ids, follow_pos_table):
     for symbol_id in symbol_ids:
         if(current_node.data == concat_symbol and symbol_id['id'] in current_node.left.last_pos):
             follow_pos_table[symbol_id['id']].update(current_node.right.first_pos)
-
-        if(current_node.data in '*?+' and symbol_id['id'] in current_node.last_pos):
+        elif(current_node.data in '*+' and symbol_id['id'] in current_node.last_pos):
             follow_pos_table[symbol_id['id']].update(current_node.first_pos)
     
     if(current_node.left):

@@ -34,25 +34,6 @@ class Node:
         else:
             return False
 
-    def do(self):
-        alphabet = set()
-
-        letter = find_subnodes(self)
-        if(letter):
-            alphabet.add(letter)
-
-        if(self.left):
-            letter = self.left.do()
-            if(letter):
-                alphabet.update(letter)
-
-        if(self.right):
-            letter = self.right.do()
-            if(letter):
-                alphabet.update(letter)
-
-        return alphabet
-
     def assign_symbol_id(self):
         if(self.is_leaf):
             self.symbol_id = Node.current_symbol_id
@@ -88,8 +69,30 @@ class Node:
     def initialize_tree(cls, rules):
         cls.current_node_id = 0
         tree = cls.create_node(None, data=rules)
-        alphabet = tree.do()
-        return tree, alphabet
+        return tree
+
+def separate_children(root):
+    alphabet = recursive_separate_children(root)
+    return alphabet
+
+def recursive_separate_children(node):
+        alphabet = set()
+
+        letter = find_subnodes(node)
+        if(letter):
+            alphabet.add(letter)
+
+        if(node.left):
+            letter = recursive_separate_children(node.left)
+            if(letter):
+                alphabet.update(letter)
+
+        if(node.right):
+            letter = recursive_separate_children(node.right)
+            if(letter):
+                alphabet.update(letter)
+
+        return alphabet
 
 def is_inside_parenthesis(data, index):
     open_parenthesis = 0

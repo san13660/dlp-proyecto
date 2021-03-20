@@ -1,5 +1,5 @@
 from graphviz import Digraph
-from tree import Node, initial_node
+from tree import Node, initial_node, separate_children
 from automaton import State, Transition, AF
 from thompson import process
 from subset import create_afd
@@ -8,29 +8,23 @@ from simulation import simulate_afd, simulate_afn
 
 import time
 
-rules = '(εa|εb)*abb'
+rules = input('Ingrese la expresion regular: ')
 
 print('\n---Creando arbol---\n')
 
-tree, alphabet = Node.initialize_tree(rules)
+tree = Node.initialize_tree(rules)
+alphabet = separate_children(tree)
 
-tree.graph_tree('Arbol', 'Arbol - {}'.format(rules))
+tree.graph_tree('Arbol_AFN_Thompson', 'Arbol (AFN Thompson) - {}'.format(rules))
 
 #---------------------------------------------------------
 
 print('\n---Creando AFN por metodo de Thompson---\n')
 
-#ARREGLAR
-current_node = initial_node(tree)
-
-current_node = current_node.parent
-
-current_state_id = 0
-
-afn = process(current_node)
+afn = process(tree)
 
 afn.assign_state_numbers()
-afn.graph_fsm('AFN', 'AFN - {}'.format(rules))
+afn.graph_fsm('AFN_Thompson', 'AFN (Thompson) - {}'.format(rules))
 
 #---------------------------------------------------------------
 
@@ -38,18 +32,18 @@ print('\n---Creando AFD por subconjuntos---\n')
 
 afd = create_afd(afn, alphabet)
 afd.assign_state_numbers()
-afd.graph_fsm('AFD', 'AFD - {}'.format(rules))
+afd.graph_fsm('AFD_Subconjuntos', 'AFD (Subconjuntos) - {}'.format(rules))
 
 #--------------------------------------------------------------
 
 print('\n---Creando AFD por metodo directo---\n')
 
 new_tree, symbol_ids = find_tree_values(tree)
-new_tree.graph_tree('Arbol_Directo', 'Arbol Directo - {}'.format(rules),show_pos=True)
+new_tree.graph_tree('Arbol_Directo', 'Arbol (AFD Directo) - {}'.format(rules),show_pos=True)
 
 afd_direct = create_direct_afd(new_tree,symbol_ids,alphabet)
 afd_direct.assign_state_numbers()
-afd_direct.graph_fsm('AFD_directo', 'AFD Directo - {}'.format(rules))
+afd_direct.graph_fsm('AFD_Directo', 'AFD (Directo) - {}'.format(rules))
 
 #-----------------------------------------------------------
 

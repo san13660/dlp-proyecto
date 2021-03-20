@@ -18,27 +18,27 @@ def simulate_afd(afd, string):
     else:
         return False
 
-def s_afn(afn, string, current_index, current_state):
+def recursive_simulation(afn, string, current_index, current_state):
     for transition in afn.transitions:
         if(transition.current_state == current_state):
             if(transition.symbol == epsilon_symbol):
                 if(current_index+1 == len(string)):
                     if(transition.next_state in afn.final_states):
                         return True
-                elif(s_afn(afn, string, current_index, transition.next_state)):
+                elif(recursive_simulation(afn, string, current_index, transition.next_state)):
                     return True
             elif(transition.symbol == string[current_index]):
                 if(current_index+1 == len(string)):
                     if(transition.next_state in afn.final_states):
                         return True
-                elif(s_afn(afn, string, current_index+1, transition.next_state)):
+                elif(recursive_simulation(afn, string, current_index+1, transition.next_state)):
                     return True
     
     return False
 
 def simulate_afn(afn, string):
     current_state = afn.initial_state
-    if(s_afn(afn, string, 0, current_state)):
+    if(recursive_simulation(afn, string, 0, current_state)):
         return True
     else:
         return False

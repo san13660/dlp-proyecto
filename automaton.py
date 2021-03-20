@@ -26,12 +26,18 @@ class Transition:
         return NotImplemented
 
 class AF:
-    def __init__(self):
+    def __init__(self, start_node_id = 0):
         self.states = []
         self.initial_state = None
         self.final_states = []
         self.transitions = []
         self.alphabet = set()
+        self.current_node_id = start_node_id
+
+    def create_state(self):
+        state = State(self.current_node_id)
+        self.current_node_id += 1
+        return state
 
     def assign_state_numbers(self):
         for transition in self.transitions:
@@ -40,6 +46,20 @@ class AF:
                     transition.current_state = state
                 if(state == transition.next_state):
                     transition.next_state = state
+
+        i = self.current_node_id
+
+        self.initial_state.id = i
+        i += 1
+        
+        for state in self.states:
+            if(state != self.initial_state and state not in self.final_states):
+                state.id = i
+                i += 1
+
+        for state in self.final_states:
+            state.id = i
+            i += 1
 
         i = 0
 

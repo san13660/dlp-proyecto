@@ -34,7 +34,7 @@ def mov(afn, state, letter):
         return None
     
 
-def find_stuff(afn, afd, state, letters):
+def recursive_mov(afn, afd, state, letters):
     for letter in letters:
         new_state = mov(afn, state, letter)
         print('mov({}, {}) = {}'.format(set(state.id),letter,set(new_state.id) if new_state else {}))
@@ -48,7 +48,7 @@ def find_stuff(afn, afd, state, letters):
 
             if(new_state_2 not in afd.states):
                 afd.states.append(new_state_2)
-                find_stuff(afn, afd, new_state_2, letters)
+                recursive_mov(afn, afd, new_state_2, letters)
 
 def create_afd(afn, letters):
     afd = AF()
@@ -58,7 +58,7 @@ def create_afd(afn, letters):
 
     afd.states.append(initial_state)
     afd.initial_state = initial_state
-    find_stuff(afn, afd, initial_state, letters)
+    recursive_mov(afn, afd, initial_state, letters)
 
     for state in afd.states:
         for final_state in afn.final_states:
