@@ -222,12 +222,3 @@ def find_subnodes(node):
         print('Nodo: ({}) | c1: ({}) | c2: ({})'.format(node.data, node_left_data, node_right_data))
 
     return None
-
-def initial_node(tree):
-    current_node = tree
-    while(True):
-        if(current_node.left):
-            current_node = current_node.left
-        else:
-            break
-    return current_node

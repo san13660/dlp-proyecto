@@ -2,164 +2,164 @@ from graphviz import Digraph
 from automaton import State, Transition, AF
 from statics import epsilon_symbol, extended_symbols, concat_symbol
 
-def create_or_fsm(afd, fsm_s, fsm_t):
+def create_or_fsm(afn, afn_s, afn_t):
     
-    si = afd.create_state()
-    sf = afd.create_state()
+    si = afn.create_state()
+    sf = afn.create_state()
 
     states = [si,sf]
-    states += fsm_s.states + fsm_t.states
+    states += afn_s.states + afn_t.states
     
-    transitions = fsm_s.transitions + fsm_t.transitions
-    transitions.append(Transition(si, fsm_s.initial_state,epsilon_symbol))
-    transitions.append(Transition(si, fsm_t.initial_state,epsilon_symbol))
+    transitions = afn_s.transitions + afn_t.transitions
+    transitions.append(Transition(si, afn_s.initial_state,epsilon_symbol))
+    transitions.append(Transition(si, afn_t.initial_state,epsilon_symbol))
     
-    for final_state in fsm_s.final_states:
+    for final_state in afn_s.final_states:
         transitions.append(Transition(final_state, sf,epsilon_symbol))
-    for final_state in fsm_t.final_states:
+    for final_state in afn_t.final_states:
         transitions.append(Transition(final_state, sf,epsilon_symbol))
 
-    new_fsm = AF(start_node_id=afd.current_node_id)
-    new_fsm.states = states
-    new_fsm.initial_state = si
-    new_fsm.final_states = [sf]
-    new_fsm.transitions = transitions
-    return new_fsm
+    new_afn = AF(start_node_id=afn.current_node_id)
+    new_afn.states = states
+    new_afn.initial_state = si
+    new_afn.final_states = [sf]
+    new_afn.transitions = transitions
+    return new_afn
 
-def create_clean_closure_fsm(afd, fsm_s):
-    si = afd.create_state()
-    sf = afd.create_state()
+def create_clean_closure_fsm(afn, afn_s):
+    si = afn.create_state()
+    sf = afn.create_state()
 
     states = [si,sf]
-    states += fsm_s.states
+    states += afn_s.states
     
-    transitions = fsm_s.transitions
-    transitions.append(Transition(si, fsm_s.initial_state,epsilon_symbol))
+    transitions = afn_s.transitions
+    transitions.append(Transition(si, afn_s.initial_state,epsilon_symbol))
     transitions.append(Transition(si, sf,epsilon_symbol))
     
-    for final_state in fsm_s.final_states:
+    for final_state in afn_s.final_states:
         transitions.append(Transition(final_state, sf,epsilon_symbol))
-        transitions.append(Transition(final_state, fsm_s.initial_state, epsilon_symbol))
+        transitions.append(Transition(final_state, afn_s.initial_state, epsilon_symbol))
 
-    new_fsm = AF(start_node_id=afd.current_node_id)
-    new_fsm.states = states
-    new_fsm.initial_state = si
-    new_fsm.final_states = [sf]
-    new_fsm.transitions = transitions
-    return new_fsm
+    new_afn = AF(start_node_id=afn.current_node_id)
+    new_afn.states = states
+    new_afn.initial_state = si
+    new_afn.final_states = [sf]
+    new_afn.transitions = transitions
+    return new_afn
 
-def create_positive_closure_fsm(afd, fsm_s):
-    si = afd.create_state()
-    sf = afd.create_state()
+def create_positive_closure_fsm(afn, afn_s):
+    si = afn.create_state()
+    sf = afn.create_state()
 
     states = [si,sf]
-    states += fsm_s.states
+    states += afn_s.states
     
-    transitions = fsm_s.transitions
-    transitions.append(Transition(si, fsm_s.initial_state,epsilon_symbol))
+    transitions = afn_s.transitions
+    transitions.append(Transition(si, afn_s.initial_state,epsilon_symbol))
     
-    for final_state in fsm_s.final_states:
+    for final_state in afn_s.final_states:
         transitions.append(Transition(final_state, sf,epsilon_symbol))
-        transitions.append(Transition(final_state, fsm_s.initial_state, epsilon_symbol))
+        transitions.append(Transition(final_state, afn_s.initial_state, epsilon_symbol))
 
-    new_fsm = AF(start_node_id=afd.current_node_id)
-    new_fsm.states = states
-    new_fsm.initial_state = si
-    new_fsm.final_states = [sf]
-    new_fsm.transitions = transitions
-    return new_fsm
+    new_afn = AF(start_node_id=afn.current_node_id)
+    new_afn.states = states
+    new_afn.initial_state = si
+    new_afn.final_states = [sf]
+    new_afn.transitions = transitions
+    return new_afn
 
-def create_zero_or_one_fsm(afd, fsm_s):
-    si = afd.create_state()
-    sf = afd.create_state()
+def create_zero_or_one_fsm(afn, afn_s):
+    si = afn.create_state()
+    sf = afn.create_state()
 
     states = [si,sf]
-    states += fsm_s.states
+    states += afn_s.states
     
-    transitions = fsm_s.transitions
-    transitions.append(Transition(si, fsm_s.initial_state,epsilon_symbol))
+    transitions = afn_s.transitions
+    transitions.append(Transition(si, afn_s.initial_state,epsilon_symbol))
     transitions.append(Transition(si, sf,epsilon_symbol))
     
-    for final_state in fsm_s.final_states:
+    for final_state in afn_s.final_states:
         transitions.append(Transition(final_state, sf,epsilon_symbol))
 
-    new_fsm = AF(start_node_id=afd.current_node_id)
-    new_fsm.states = states
-    new_fsm.initial_state = si
-    new_fsm.final_states = [sf]
-    new_fsm.transitions = transitions
-    return new_fsm
+    new_afn = AF(start_node_id=afn.current_node_id)
+    new_afn.states = states
+    new_afn.initial_state = si
+    new_afn.final_states = [sf]
+    new_afn.transitions = transitions
+    return new_afn
 
-def create_concat_fsm(afd, fsm_s, fsm_t):
+def create_concat_fsm(afn, afn_s, afn_t):
     states = []
 
-    for state in fsm_s.states:
-        if(state not in fsm_s.final_states):
+    for state in afn_s.states:
+        if(state not in afn_s.final_states):
             states.append(state)
 
-    states += fsm_t.states
+    states += afn_t.states
     
     transitions = []
-    for transition in fsm_s.transitions:
-        if(transition.next_state in fsm_s.final_states):
-            transition.next_state = fsm_t.initial_state
+    for transition in afn_s.transitions:
+        if(transition.next_state in afn_s.final_states):
+            transition.next_state = afn_t.initial_state
         transitions.append(transition)
 
-    transitions += fsm_t.transitions
+    transitions += afn_t.transitions
 
-    new_fsm = AF(start_node_id=afd.current_node_id)
-    new_fsm.states = states
-    new_fsm.initial_state = fsm_s.initial_state
-    new_fsm.final_states = fsm_t.final_states
-    new_fsm.transitions = transitions
-    return new_fsm
+    new_afn = AF(start_node_id=afn.current_node_id)
+    new_afn.states = states
+    new_afn.initial_state = afn_s.initial_state
+    new_afn.final_states = afn_t.final_states
+    new_afn.transitions = transitions
+    return new_afn
 
-def create_letter_fsm(afd, letter):
-    si = afd.create_state()
-    sf = afd.create_state()
+def create_letter_fsm(afn, letter):
+    si = afn.create_state()
+    sf = afn.create_state()
 
     transitions = []
     transitions.append(Transition(si,sf,letter))
     
-    new_fsm = AF(start_node_id=afd.current_node_id)
-    new_fsm.states = [si,sf]
-    new_fsm.initial_state = si
-    new_fsm.final_states = [sf]
-    new_fsm.transitions = transitions
-    return new_fsm
+    new_afn = AF(start_node_id=afn.current_node_id)
+    new_afn.states = [si,sf]
+    new_afn.initial_state = si
+    new_afn.final_states = [sf]
+    new_afn.transitions = transitions
+    return new_afn
 
 
-def process_down(afd, node):
+def recursive_process_node(afn_o, node):
     if(node.left.data in extended_symbols):
-        fsm_s = process_down(afd, node.left)
+        afn_s = recursive_process_node(afn_o, node.left)
     else:
-        fsm_s = create_letter_fsm(afd, node.left.data)
+        afn_s = create_letter_fsm(afn_o, node.left.data)
 
     if(node.right):
         if(node.right.data in extended_symbols):
-            fsm_t = process_down(afd, node.right)
+            afn_t = recursive_process_node(afn_o, node.right)
         else:
-            fsm_t = create_letter_fsm(afd, node.right.data)
+            afn_t = create_letter_fsm(afn_o, node.right.data)
 
     if(node.data == '|'):
         print('Creating OR AFN')
-        fsm = create_or_fsm(afd, fsm_s,fsm_t)
+        afn = create_or_fsm(afn_o, afn_s,afn_t)
     elif(node.data == concat_symbol):
         print('Creating CONCAT AFN')
-        fsm = create_concat_fsm(afd, fsm_s,fsm_t)
+        afn = create_concat_fsm(afn_o, afn_s,afn_t)
     elif(node.data == '*'):
         print('Creating CLEAN CLOSURE AFN')
-        fsm = create_clean_closure_fsm(afd, fsm_s)
+        afn = create_clean_closure_fsm(afn_o, afn_s)
     elif(node.data == '+'):
         print('Creating POSITIVE CLOSURE AFN')
-        fsm = create_positive_closure_fsm(afd, fsm_s)
+        afn = create_positive_closure_fsm(afn_o, afn_s)
     elif(node.data == '?'):
         print('Creating ZERO OR ONE AFN')
-        fsm = create_zero_or_one_fsm(afd, fsm_s)
+        afn = create_zero_or_one_fsm(afn_o, afn_s)
     
-    return fsm
+    return afn
 
-def process(root):
-    afd = AF()
-    afd = process_down(afd, root)
-    return afd
+def create_afn(root):
+    afn = AF()
+    afn = recursive_process_node(afn, root)
+    return afn

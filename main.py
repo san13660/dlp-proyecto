@@ -1,7 +1,7 @@
 from graphviz import Digraph
-from tree import Node, initial_node, separate_children
+from tree import Node, separate_children
 from automaton import State, Transition, AF
-from thompson import process
+from thompson import create_afn
 from subset import create_afd
 from direct import find_tree_values, create_direct_afd
 from simulation import simulate_afd, simulate_afn
@@ -63,7 +63,7 @@ tree.graph_tree('Arbol_AFN_Thompson', 'Arbol (AFN Thompson) - {}'.format(rules))
 
 print('\n---Creando AFN por metodo de Thompson---\n')
 
-afn = process(tree)
+afn = create_afn(tree)
 
 afn.assign_state_numbers()
 afn.graph_fsm('AFN_Thompson', 'AFN (Thompson) - {}'.format(rules))
