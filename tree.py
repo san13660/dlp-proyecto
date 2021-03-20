@@ -164,7 +164,7 @@ def find_subnodes(node):
                 node.data = data[i]
                 node.left = Node.create_node(node, data=node_left_data)
                 node.right = Node.create_node(node, data=node_right_data)
-                print('SEPARACION: {} {} {}'.format(node_left_data, node.data, node_right_data))
+                print('Nodo: ({}) | c1: ({}) | c2: ({})'.format(node.data, node_left_data, node_right_data))
                 return None
 
     if(data[-1] in unary_operators):
@@ -216,7 +216,10 @@ def find_subnodes(node):
     if(node_right_data):
         node.right = Node.create_node(node, data=node_right_data)
 
-    print('SEPARACION: {} {} {}'.format(node_left_data, node.data, node_right_data))
+    if(node.data in unary_operators):
+        print('Nodo: ({}) | c1: ({})'.format(node.data, node_left_data))
+    else:
+        print('Nodo: ({}) | c1: ({}) | c2: ({})'.format(node.data, node_left_data, node_right_data))
 
     return None
 

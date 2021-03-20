@@ -73,7 +73,7 @@ afn.graph_fsm('AFN_Thompson', 'AFN (Thompson) - {}'.format(rules))
 print('\n---Creando AFD por subconjuntos---\n')
 
 afd = create_afd(afn, alphabet)
-#afd.assign_state_numbers()
+afd.assign_state_numbers()
 afd.graph_fsm('AFD_Subconjuntos', 'AFD (Subconjuntos) - {}'.format(rules))
 
 #--------------------------------------------------------------
@@ -84,30 +84,33 @@ new_tree, symbol_ids = find_tree_values(tree)
 new_tree.graph_tree('Arbol_Directo', 'Arbol (AFD Directo) - {}'.format(rules),show_pos=True)
 
 afd_direct = create_direct_afd(new_tree,symbol_ids,alphabet)
-#afd_direct.assign_state_numbers()
+afd_direct.assign_state_numbers()
 afd_direct.graph_fsm('AFD_Directo', 'AFD (Directo) - {}'.format(rules))
 
 #-----------------------------------------------------------
 
 while(True):
-    string = input('\nIngrese cadena a evaluar: ')
-    print('\n-------------SIMULACION-----------------')
+    print('\n----------------SIMULACION----------------')
+    x = 20 - int(len(rules)/2)
+    print('-{}{}{}-'.format('-'*x, rules, '-'*x))
     
+    string = input('\nIngrese cadena a evaluar: ')
+
     t0 = time.perf_counter()
     result_afn = simulate_afn(afn, string)
     t1 = time.perf_counter()
-    print('AFN: {}'.format(result_afn))
-    print("Time elapsed: {}s".format(t1 - t0))
+    print('\nAFN: {}'.format('ACEPTADO' if result_afn else 'RECHAZADO'))
+    print("Tiempo de simulacion: {}s".format(t1 - t0))
 
     t0 = time.perf_counter()
     result_afd_subset = simulate_afd(afd, string)
     t1 = time.perf_counter()
-    print('\nAFD (Subconjuntos): {}'.format(result_afd_subset))
-    print("Time elapsed: {}s".format(t1 - t0))
+    print('\nAFD (Subconjuntos): {}'.format('ACEPTADO' if result_afd_subset else 'RECHAZADO'))
+    print("Tiempo de simulacion: {}s".format(t1 - t0))
 
     t0 = time.perf_counter()
     result_afd_direct = simulate_afd(afd_direct, string)
     t1 = time.perf_counter()
-    print('\nAFD (Directo): {}'.format(result_afd_direct))
-    print("Time elapsed: {}s".format(t1 - t0))
+    print('\nAFD (Directo): {}'.format('ACEPTADO' if result_afd_direct else 'RECHAZADO'))
+    print("Tiempo de simulacion: {}s".format(t1 - t0))
 

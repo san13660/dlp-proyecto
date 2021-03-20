@@ -51,6 +51,8 @@ def find_node_stuff(node, symbol_ids):
             node.last_pos.update(node.left.last_pos)
             node.last_pos.update(node.right.last_pos)
 
+        print('Nodo: ({}) | nullable: {} | first_pos: {} | last_pos: {}'.format(node.data, node.nullable, node.first_pos, node.last_pos))
+
 def recursive(afd_direct, current_state, alphabet, symbol_ids, follow_pos_table, final_state_symbol_id):
     for letter in alphabet:
         new_state_id = set()
@@ -116,8 +118,7 @@ def create_direct_afd(tree, symbol_ids, alphabet):
 
     recursive_follow_pos(tree, symbol_ids, follow_pos_table)
 
-    print('\n---------------------------')
-    print(follow_pos_table)
+    print('follow_pos: {}'.format(follow_pos_table))
 
     afd_direct = AF()
 
