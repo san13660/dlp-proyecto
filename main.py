@@ -4,6 +4,7 @@ from automaton import State, Transition, AF
 from thompson import process
 from subset import create_afd
 from direct import find_tree_values, create_direct_afd
+from simulation import simulate_afd
 
 rules = '(a|b)abb'
 
@@ -43,26 +44,6 @@ new_tree.graph_tree('Arbol_Directo', 'Arbol Directo - {}'.format(rules),show_pos
 afd_direct = create_direct_afd(new_tree,symbol_ids,alphabet)
 afd_direct.assign_state_numbers()
 afd_direct.graph_fsm('AFD_directo', 'AFD Directo - {}'.format(rules))
-
-
-
-def simulate_afd(afd, string):
-    current_indx = 0
-    current_state = afd.initial_state
-
-    for s in string:
-        found = False
-        for transition in afd.transitions:
-            if(transition.symbol == string[current_indx] and transition.current_state == current_state):
-                current_state = transition.next_state
-                found = True
-        if(not found):
-            return False
-
-    if(current_state in afd.final_states):
-        return True
-    else:
-        return False
 
 while(True):
     string = input('Ingrese cadena a evaluar: ')
