@@ -94,17 +94,20 @@ while(True):
     print('\n-------------SIMULACION-----------------')
     
     t0 = time.perf_counter()
-    print('AFN: {}'.format(simulate_afn(afn, string)))
+    result_afn = simulate_afn(afn, string)
     t1 = time.perf_counter()
+    print('AFN: {}'.format(result_afn))
     print("Time elapsed: {}s".format(t1 - t0))
 
     t0 = time.perf_counter()
-    print('\nAFD (Subconjuntos): {}'.format(simulate_afd(afd, string)))
+    result_afd_subset = simulate_afd(afd, string)
     t1 = time.perf_counter()
+    print('\nAFD (Subconjuntos): {}'.format(result_afd_subset))
     print("Time elapsed: {}s".format(t1 - t0))
 
     t0 = time.perf_counter()
-    print('\nAFD (Directo): {}'.format(simulate_afd(afd_direct, string)))
+    result_afd_direct = simulate_afd(afd_direct, string)
     t1 = time.perf_counter()
+    print('\nAFD (Directo): {}'.format(result_afd_direct))
     print("Time elapsed: {}s".format(t1 - t0))
 
