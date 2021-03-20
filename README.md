@@ -1,3 +1,2 @@
-# Proyecto
-## Diseño de lenguajes de programación
+# Proyecto - Diseño de lenguajes de programación
 ### Christopher Sandoval 13660
